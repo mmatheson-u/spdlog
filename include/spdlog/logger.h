@@ -147,11 +147,6 @@ public:
     // create new logger with same sinks and configuration.
     virtual std::shared_ptr<logger> clone(std::string logger_name);
 
-    #ifdef SPDLOG_SCOPED_ATTRIBUTES
-    void push_attribute(details::attribute&& a);
-    details::attribute pop_attribute();
-    #endif
-
 protected:
     virtual void sink_it_(details::log_msg &msg);
     virtual void flush_();
@@ -174,6 +169,9 @@ protected:
     std::atomic<size_t> msg_counter_{1};
 
     #ifdef SPDLOG_SCOPED_ATTRIBUTES
+    friend class spdlog::details::scoped_attribute<logger>;
+    void push_attribute(details::attribute&& a);
+    details::attribute pop_attribute();
     std::vector<details::attribute> scoped_attributes_;
     #endif
 };

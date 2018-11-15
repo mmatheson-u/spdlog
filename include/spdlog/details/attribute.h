@@ -39,6 +39,7 @@ private:
 #define CONCAT(x, y) x##y
 #define CONCAT2(x, y) CONCAT(x, y)
 #define ANONYMOUS_VAR(str) CONCAT2(str, __LINE__)
-#define SCOPED_ATTRIBUTE(...) \
-    spdlog::details::scoped_attribute ANONYMOUS_VAR(_scoped_attribute)(spdlog::default_logger(), __VA_ARGS__);
+#define SCOPED_ATTRIBUTE_TO_LOGGER(...) \
+    spdlog::details::scoped_attribute ANONYMOUS_VAR(_scoped_attribute)(__VA_ARGS__);
+#define SCOPED_ATTRIBUTE(...) SCOPED_ATTRIBUTE_TO_LOGGER(spdlog::default_logger(), __VA_ARGS__)
 
