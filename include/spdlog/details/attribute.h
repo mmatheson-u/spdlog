@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef SPDLOG_SCOPED_ATTRIBUTES
 #include <string>
 #include <variant>
