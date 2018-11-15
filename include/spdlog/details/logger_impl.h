@@ -6,7 +6,6 @@
 #pragma once
 
 #include "spdlog/details/fmt_helper.h"
-
 #include <memory>
 #include <string>
 
@@ -235,6 +234,7 @@ inline void spdlog::logger::log(level::level_enum lvl, const wchar_t *fmt, const
         fmt::format_to(wbuf, fmt, args...);
         fmt::memory_buffer buf;
         wbuf_to_utf8buf(wbuf, buf);
+
         details::log_msg log_msg(&name_, lvl, to_string_view(buf));
         sink_it_(log_msg);
     }
@@ -355,7 +355,11 @@ inline void spdlog::logger::sink_it_(details::log_msg &msg)
     {
         if (sink->should_log(msg.level))
         {
+            #ifdef SPDLOG_SCOPED_ATTRIBUTES
+            sink->log(msg, scoped_attributes_);
+            #else
             sink->log(msg);
+            #endif
         }
     }
 
@@ -410,3 +414,17 @@ inline std::shared_ptr<spdlog::logger> spdlog::logger::clone(std::string logger_
     cloned->set_error_handler(this->error_handler());
     return cloned;
 }
+
+#ifdef SPDLOG_SCOPED_ATTRIBUTES
+inline void spdlog::logger::push_attribute(details::attribute&& a)
+{
+    scoped_attributes_.emplace_back(a);
+}
+
+inline spdlog::details::attribute spdlog::logger::pop_attribute()
+{
+    spdlog::details::attribute a = scoped_attributes_.back();
+    scoped_attributes_.pop_back();
+    return a;
+}
+#endif

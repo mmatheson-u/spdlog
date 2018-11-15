@@ -89,6 +89,12 @@ public:
     const std::string on_cyan = "\033[46m";
     const std::string on_white = "\033[47m";
 
+    #ifdef SPDLOG_SCOPED_ATTRIBUTES
+    void log(const details::log_msg &msg, const std::vector<details::attribute>& attr) override
+    {
+    }
+    #endif
+
     void log(const details::log_msg &msg) override
     {
         // Wrap the originally formatted message in color codes.

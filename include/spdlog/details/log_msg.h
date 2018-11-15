@@ -15,10 +15,10 @@ namespace spdlog {
 namespace details {
 struct log_msg
 {
-
-    log_msg(const std::string *loggers_name, level::level_enum lvl, string_view_t view)
+    log_msg(const std::string *loggers_name, level::level_enum lvl, string_view_t view, std::vector<std::string>* attr = nullptr)
         : logger_name(loggers_name)
         , level(lvl)
+        , attributes(attr)
 #ifndef SPDLOG_NO_DATETIME
         , time(os::now())
 #endif
@@ -38,6 +38,8 @@ struct log_msg
     log_clock::time_point time;
     size_t thread_id{0};
     size_t msg_id{0};
+
+    std::vector<std::string>* attributes;
 
     // wrapping the formatted text with color (updated by pattern_formatter).
     mutable size_t color_range_start{0};

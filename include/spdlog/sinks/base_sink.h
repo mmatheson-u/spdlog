@@ -26,6 +26,12 @@ public:
     base_sink(const base_sink &) = delete;
     base_sink &operator=(const base_sink &) = delete;
 
+    #ifdef SPDLOG_SCOPED_ATTRIBUTES
+    void log(const details::log_msg &msg, const std::vector<details::attribute>& attr) override
+    {
+    }
+    #endif
+
     void log(const details::log_msg &msg) final
     {
         std::lock_guard<Mutex> lock(mutex_);

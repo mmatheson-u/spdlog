@@ -6,6 +6,7 @@
 #pragma once
 
 #include "spdlog/details/log_msg.h"
+#include "spdlog/details/attribute.h"
 #include "spdlog/details/pattern_formatter.h"
 #include "spdlog/formatter.h"
 
@@ -28,6 +29,9 @@ public:
 
     virtual ~sink() = default;
     virtual void log(const details::log_msg &msg) = 0;
+    #ifdef SPDLOG_SCOPED_ATTRIBUTES
+    virtual void log(const details::log_msg &msg, const std::vector<details::attribute>& attr) = 0;
+    #endif
     virtual void flush() = 0;
     virtual void set_pattern(const std::string &pattern) = 0;
     virtual void set_formatter(std::unique_ptr<spdlog::formatter> sink_formatter) = 0;

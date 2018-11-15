@@ -65,6 +65,12 @@ public:
         colors_[level] = color;
     }
 
+    #ifdef SPDLOG_SCOPED_ATTRIBUTES
+    void log(const details::log_msg &msg, const std::vector<details::attribute>& attr) override
+    {
+    }
+    #endif
+
     void log(const details::log_msg &msg) final override
     {
         std::lock_guard<mutex_t> lock(mutex_);
